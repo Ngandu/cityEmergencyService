@@ -34,6 +34,8 @@ const Signin = observer(({ userstore }) => {
   const [email, setEmail] = useState("pngandu@yahoo.com");
   const [password, setPassword] = useState("P@ssword1");
 
+  const db = firebase.firestore();
+
   useEffect(() => {
     // Fetch Products
     console.log("Signin.js");
@@ -42,6 +44,18 @@ const Signin = observer(({ userstore }) => {
   const emptyState = () => {
     setEmail("");
     setPassword("");
+  };
+
+  const getProviderDetails = async (usr) => {
+    // fetch user provider details
+    const providerUser = await db
+      .collection("serviceProvider")
+      .where("userid", "==", usr.uid)
+      .get();
+
+    providerUser.docs.forEach((element) => {
+      userstore.setProdiverDetails({ id: element.id, ...element.data() });
+    });
   };
 
   const handleSignin = async () => {
@@ -56,7 +70,7 @@ const Signin = observer(({ userstore }) => {
     }
 
     // Check whether the email is for a service provider
-    const db = firebase.firestore();
+
     const userDetails = await db
       .collection("users")
       .where("email", "==", email)
@@ -70,7 +84,6 @@ const Signin = observer(({ userstore }) => {
         alert("user not permitted");
         return;
       } else {
-        alert("Boom");
         const user = signInUser(email, password);
         console.log(user);
         if (user) {
@@ -87,6 +100,7 @@ const Signin = observer(({ userstore }) => {
       emptyState();
       // Update Mobx User and Login
       console.log("setUser");
+      getProviderDetails(user);
       userstore.setUser(user);
       //navigation.replace("Home");
     }

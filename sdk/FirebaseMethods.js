@@ -135,11 +135,40 @@ export async function getIncedents(userid) {
   try {
     const db = firebase.firestore();
     let inc = [];
+
     await db
       .collection("incedents")
       .where("userid", "==", userid)
       .where("status", "==", "Open")
       .where("service", "!=", "Panic")
+      .onSnapshot((snapshot) => {
+        let snap = snapshot.docChanges();
+        snap.forEach((element) => {
+          if (element.type == "added") {
+            let temp = element.doc.data();
+            temp.id = element.doc.id;
+            inc.push(temp);
+          }
+        });
+      });
+
+    // console.log("inc", inc);
+
+    return inc;
+  } catch (error) {
+    Alert.alert("There is something wrong!", error.message);
+    console.log(error.message);
+  }
+}
+
+// get One incedent
+export async function getOneIncedents(id) {
+  try {
+    const db = firebase.firestore();
+    let inc = [];
+    await db
+      .collection("incedents")
+      .doc(id)
       .get()
       .then((snap) => {
         snap.docs.forEach((element) => {
@@ -153,6 +182,21 @@ export async function getIncedents(userid) {
   } catch (error) {
     Alert.alert("There is something wrong!", error.message);
     console.log(error.message);
+  }
+}
+
+// Accept Incedent
+
+export async function acceptIncedent(inc) {
+  console.log("Update Incident");
+  inc.status = "Accepted";
+  // console.log(inc);
+  try {
+    const db = firebase.firestore();
+    await db.collection("incedents").doc(inc.id).update(inc);
+    return true;
+  } catch (err) {
+    Alert.alert("There is something wrong!", err.message);
   }
 }
 
@@ -226,6 +270,39 @@ export async function fetchresponses(id) {
     });
 
     return temp;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+}
+
+// response to incedents
+
+export async function sendresponse(resp) {
+  try {
+    const db = firebase.firestore();
+    await db.collection("responses").add(resp);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return error.message;
+  }
+}
+
+// Set Service Provider to Active
+
+export async function setProviderActive(id, data) {
+  try {
+    const db = firebase.firestore();
+
+    let dataP = {
+      status: data.status,
+    };
+
+    console.log(dataP);
+
+    await db.collection("serviceProvider").doc(id).update(dataP);
+    return `Your profile has been set to ${data.status}`;
   } catch (error) {
     console.log(error);
     return error.message;

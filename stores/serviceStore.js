@@ -4,6 +4,7 @@ class ServiceStore {
   //observables
   service = "";
   selectedEmergency = [];
+  location = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -18,6 +19,11 @@ class ServiceStore {
   setEmergency(emg) {
     console.log("setEmergency");
     this.selectedEmergency = emg;
+  }
+
+  setLocation(lc) {
+    console.log("setEmergency");
+    this.location = lc;
   }
 }
 

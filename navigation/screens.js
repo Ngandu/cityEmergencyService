@@ -27,10 +27,21 @@ import ServiceStore from "./../stores/serviceStore";
 // Import Screens
 import Home from "../screens/Home";
 import Signin from "./../screens/Signin";
+import EmergencyView from "./../screens/EmergencyView";
+import Mapscreen from "./../screens/map";
 
 // Convert Screens
 const MHome = () => (
   <Home serviceStore={ServiceStore} userstore={UserStore}></Home>
+);
+const MEmergencyView = () => (
+  <EmergencyView
+    serviceStore={ServiceStore}
+    userstore={UserStore}
+  ></EmergencyView>
+);
+const MMapscreen = () => (
+  <Mapscreen serviceStore={ServiceStore} userstore={UserStore}></Mapscreen>
 );
 const MSignin = () => (
   <Signin serviceStore={ServiceStore} userstore={UserStore}></Signin>
@@ -46,13 +57,20 @@ function HomeStack(props) {
           headerShown: false,
         })}
       />
-      {/* <Stack.Screen
-        name="Service"
-        component={MService}
+      <Stack.Screen
+        name="EmergencyView"
+        component={MEmergencyView}
         options={({ navigation }) => ({
           headerShown: true,
         })}
-      /> */}
+      />
+      <Stack.Screen
+        name="Map"
+        component={MMapscreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+        })}
+      />
     </Stack.Navigator>
   );
 }

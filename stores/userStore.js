@@ -4,6 +4,7 @@ class UserStore {
   //observables
   user = {};
   loggedIn = false;
+  prodiverDetails = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -14,6 +15,12 @@ class UserStore {
     console.log("setUser");
     this.user = user;
     this.loggedIn = true;
+  }
+
+  // actions
+  setProdiverDetails(user) {
+    console.log("setProdiverDetails");
+    this.prodiverDetails = user;
   }
 
   // setLogin

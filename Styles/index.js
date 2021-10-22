@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+const windowHeight = Dimensions.get("screen").height;
 
 const Colors = {
   gey: "#111111",
@@ -31,7 +32,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   homecontainer: {
-    paddingTop: 90,
+    paddingTop: 10,
   },
   homeButton: {
     backgroundColor: Colors.yellow,
@@ -47,7 +48,13 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   panicBtn: {
-    backgroundColor: Colors.red,
+    backgroundColor: Colors.primary,
+    flex: 1,
+    textAlign: "center",
+    margin: 5,
+    paddingTop: 40,
+    paddingBottom: 40,
+    borderRadius: 20,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -144,5 +151,18 @@ export default StyleSheet.create({
   responsesmall: {
     fontSize: 10,
     color: Colors.grey,
+  },
+  activateBtn: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    zIndex: 10,
+    marginTop: windowHeight - 100,
+  },
+  homeNoticeArea: {
+    width: "100%",
+    padding: 10,
+    paddingTop: 50,
+    height: windowHeight / 3,
   },
 });
