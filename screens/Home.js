@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   Dimensions,
+  Pressable,
 } from "react-native";
 import * as firebase from "firebase";
 import "firebase/firestore";
@@ -35,33 +36,6 @@ const Home = observer(({ userstore, serviceStore }) => {
   const [loading, setLoading] = useState(false);
   const [Incedents, setIncedents] = useState([]);
 
-  // fetch Open Incedents
-
-  async function fetchIncedents() {
-    // const incedents = await getIncedents(userstore.user.uid);
-    // setIncedents(incedents);
-    const db = firebase.firestore();
-    let inc = [];
-    await db
-      .collection("incedents")
-      .where("userid", "==", userstore.user.uid)
-      .where("status", "!=", "Close")
-      .where("service", "!=", "Panic")
-      .onSnapshot((snapshot) => {
-        let snap = snapshot.docChanges();
-        console.log("snap", snap);
-        snap.forEach((element) => {
-          if (element.type == "added") {
-            let temp = element.doc.data();
-            temp.id = element.doc.id;
-            inc.push(temp);
-          }
-        });
-        console.log(inc);
-        setIncedents(inc);
-      });
-  }
-
   useEffect(() => {
     console.log("incedents", Incedents.length);
     console.log("incedents", Incedents);
@@ -90,7 +64,7 @@ const Home = observer(({ userstore, serviceStore }) => {
     const db = firebase.firestore();
     db.collection("incedents")
       .where("userid", "==", userstore.user.uid)
-      .where("status", "!=", "Open")
+      .where("status", "!=", "Closed")
       .onSnapshot((snapshot) => {
         let _inc = [];
         let snap = snapshot.docChanges();
@@ -108,11 +82,6 @@ const Home = observer(({ userstore, serviceStore }) => {
         setIncedents(_inc);
       });
   }, []);
-
-  useEffect(() => {
-    // Fetch Products
-    console.log(Service);
-  }, [Service]);
 
   const setActive = async (status) => {
     let temp = userstore.prodiverDetails;
@@ -134,6 +103,8 @@ const Home = observer(({ userstore, serviceStore }) => {
     await serviceStore.setEmergency(inc);
     navigation.navigate("Map");
   };
+
+  console.log(userstore.prodiverDetails.serviceStatus);
 
   return (
     <ImageBackground
@@ -175,32 +146,43 @@ const Home = observer(({ userstore, serviceStore }) => {
               ) : null}
             </View>
             <View style={[Styles.containerRow, Styles.homecontainer]}>
-              <TouchableHighlight
+              <Pressable
                 style={Styles.homeButton}
                 onPress={() => setIncedent("Police")}
               >
                 <Text category="h4" style={Styles.homeButtonText}>
                   Profile
                 </Text>
-              </TouchableHighlight>
-              <TouchableHighlight
+              </Pressable>
+              <Pressable
                 style={Styles.homeButton}
-                onPress={() => setIncedent("Ambulance")}
+                onPress={() => navigation.navigate("reports")}
               >
                 <Text category="h4" style={Styles.homeButtonText}>
                   Reports
                 </Text>
-              </TouchableHighlight>
+              </Pressable>
             </View>
             <View style={Styles.containerRow}>
-              <TouchableHighlight
-                style={Styles.panicBtn}
-                onPress={() => setActive("OFF")}
-              >
-                <Text category="h4" style={Styles.homeButtonText}>
-                  Set to Available
-                </Text>
-              </TouchableHighlight>
+              {userstore.prodiverDetails.serviceStatus != "available" ? (
+                <Pressable
+                  style={Styles.panicBtn}
+                  onPress={() => setActive("available")}
+                >
+                  <Text category="h4" style={Styles.homeButtonText}>
+                    Set to Available
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={Styles.panicBtn}
+                  onPress={() => setActive("not available")}
+                >
+                  <Text category="h4" style={Styles.homeButtonText}>
+                    Set to Not Available
+                  </Text>
+                </Pressable>
+              )}
             </View>
           </ApplicationProvider>
         </View>

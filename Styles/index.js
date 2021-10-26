@@ -165,4 +165,12 @@ export default StyleSheet.create({
     paddingTop: 50,
     height: windowHeight / 3,
   },
+  buttonGroup: {
+    flexDirection: "row",
+    marginBottom: 20,
+  },
+  buttonGroupBtn: {
+    flex: 1,
+    color: Colors.white,
+  },
 });

@@ -29,6 +29,7 @@ import Home from "../screens/Home";
 import Signin from "./../screens/Signin";
 import EmergencyView from "./../screens/EmergencyView";
 import Mapscreen from "./../screens/map";
+import Reports from "./../screens/Reports";
 
 // Convert Screens
 const MHome = () => (
@@ -42,6 +43,9 @@ const MEmergencyView = () => (
 );
 const MMapscreen = () => (
   <Mapscreen serviceStore={ServiceStore} userstore={UserStore}></Mapscreen>
+);
+const MReports = () => (
+  <Reports serviceStore={ServiceStore} userstore={UserStore}></Reports>
 );
 const MSignin = () => (
   <Signin serviceStore={ServiceStore} userstore={UserStore}></Signin>
@@ -67,6 +71,13 @@ function HomeStack(props) {
       <Stack.Screen
         name="Map"
         component={MMapscreen}
+        options={({ navigation }) => ({
+          headerShown: true,
+        })}
+      />
+      <Stack.Screen
+        name="reports"
+        component={MReports}
         options={({ navigation }) => ({
           headerShown: true,
         })}

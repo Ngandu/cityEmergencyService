@@ -215,6 +215,31 @@ export async function closeIncedent(inc) {
   }
 }
 
+// get Incedents by status
+
+export async function incedentsForReports(id) {
+  try {
+    let inc = [];
+    const db = firebase.firestore();
+    await db
+      .collection("incedents")
+      .where("userid", "==", id)
+      .get()
+      .then((snap) => {
+        console.log("snap", snap);
+        snap.docs.forEach((element) => {
+          let temp = element.data();
+          temp.id = element.id;
+          inc.push(temp);
+        });
+      });
+    return inc;
+  } catch (error) {
+    Alert.alert("There is something wrong!", error.message);
+    console.log(error.message);
+  }
+}
+
 export async function registerWithGoogle() {
   console.log("google");
   //return;
@@ -296,7 +321,7 @@ export async function setProviderActive(id, data) {
     const db = firebase.firestore();
 
     let dataP = {
-      status: data.status,
+      serviceStatus: data.status,
     };
 
     console.log(dataP);

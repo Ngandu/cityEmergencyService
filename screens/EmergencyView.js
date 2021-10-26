@@ -111,14 +111,15 @@ const EmergencyView = observer(({ userstore, serviceStore }) => {
                     Accept
                   </Button>
                 )}
-
-                <Button
-                  appearance="ghost"
-                  status="info"
-                  onPress={() => updateInc(Incedents)}
-                >
-                  Close
-                </Button>
+                {Incedents.status != "Closed" && (
+                  <Button
+                    appearance="ghost"
+                    status="info"
+                    onPress={() => updateInc(Incedents)}
+                  >
+                    Close
+                  </Button>
+                )}
               </View>
             </View>
           </View>
